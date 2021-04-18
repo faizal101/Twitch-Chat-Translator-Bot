@@ -1,0 +1,13 @@
+{
+  "name": "twitch-translator-bot",
+  "version": "1.0.0",
+  "description": "A Twtich bot that automatically translates messages to the language chosen by the streamer.",
+  "main": "src/bot.js",
+  "scripts": {
+    "start": "node src/bot.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["twitch", "bot", "stream", "translate"],
+  "author": "Kuu",
+  "license": "MIT"
+}
