@@ -42,7 +42,7 @@ function onMessageHandler (target, context, msg, self) {
       client.say(target, "pong")
     }
 
-    translateMessage(commandName, target);
+    translateMessage(commandName, target, context.username);
 
   }
   
@@ -52,7 +52,7 @@ function onMessageHandler (target, context, msg, self) {
   }
 
   // Translate Message
-  function translateMessage(message, target) {
+  function translateMessage(message, target, user) {
     var subscriptionKey = process.env.AZURE_SUB_KEY;
     var endpoint = "https://api.cognitive.microsofttranslator.com/translate";
     axios({
@@ -71,13 +71,8 @@ function onMessageHandler (target, context, msg, self) {
       }],
       responseType: 'json'
   }).then(function(response){
-    const data = JSON.stringify(response.data)
-    // console.log(JSON.stringify(response.data, null, 4));
     const translatedText = response.data[0].translations[0].text;
     const detectedLang = response.data[0].detectedLanguage.language;
-    console.log(data)
-    console.log(translatedText)
-    console.log(detectedLang)
-    if (detectedLang != 'en') return client.say(target, translatedText);
+    if (detectedLang != 'en') return client.say(target, `${user}[TRANSLATED]: ${translatedText}`);
   });
   }
