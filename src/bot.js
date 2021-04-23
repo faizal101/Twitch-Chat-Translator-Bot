@@ -73,6 +73,6 @@ function onMessageHandler (target, context, msg, self) {
   }).then(function(response){
     const translatedText = response.data[0].translations[0].text;
     const detectedLang = response.data[0].detectedLanguage.language;
-    if (detectedLang != 'en') return client.say(target, `${user}[TRANSLATED]: ${translatedText}`);
+    if (detectedLang != 'en') return client.say(target, `${user}[${detectedLang}->en]: ${translatedText}`);
   });
   }
