@@ -28,22 +28,8 @@ function onMessageHandler (target, context, msg, self) {
   
     // Remove whitespace from chat message
     const commandName = msg.trim();
-  
-    // If the command is known, let's execute it
-    if (commandName === '!hello') {
-      client.say(target, 'Hello World!');
-      console.log(`* Executed ${commandName} command`);
-    } 
-    // else {
-    //   console.log(`* Unknown command ${commandName}`);
-    // }
-
-    if (commandName.includes("ping")) {
-      client.say(target, "pong")
-    }
 
     translateMessage(commandName, target, context.username);
-
   }
   
   // Called every time the bot connects to Twitch chat

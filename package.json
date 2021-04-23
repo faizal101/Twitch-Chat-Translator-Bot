@@ -1,7 +1,7 @@
 {
   "name": "twitch-translator-bot",
   "version": "1.0.0",
-  "description": "A Twtich bot that automatically translates messages to the language chosen by the streamer.",
+  "description": "A Twitch chat bot that automatically translates users messages.",
   "main": "src/bot.js",
   "scripts": {
     "start": "node src/bot.js",
