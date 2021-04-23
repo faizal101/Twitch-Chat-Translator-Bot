@@ -34,3 +34,8 @@ Note: The TODO list isn't in order.
 - [ ] Implement a language ignore list
 - [ ] Implement a third-party language detection library do avoid using Azure's Language Detect
 - [ ] Think of a name of the bot
+- [ ] Break message into multiple messages if it's too large
+
+## Contributing
+
+Feel free to create a PR to this repo. You could work on one of the tasks in the TODO list, fix a bug or even implement a feature I haven't considered.
