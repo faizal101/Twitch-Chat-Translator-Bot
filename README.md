@@ -14,7 +14,7 @@ A Twitch chat bot that automatically translates users messages to English.
 > **BOT_USERNAME** is the username of the Twitch account.\
 **TWITCH_OAUTH** is the token needed to connect to Twitch chat. You can generate one [here](https://twitchapps.com/tmi/).\
 **CHANNEL_NAME** is where you want the bot to run. This should be your Twitch channel (username).\
-**AZURE_SUB_KEY** Read the [prequisites in the Quickstart documentation](https://docs.microsoft.com/en-gb/azure/cognitive-services/translator/quickstart-translator) on how to create a Translator resource in Azure and generate a key.
+**AZURE_SUB_KEY** Read the [prequisites in the Quickstart documentation](https://docs.microsoft.com/en-gb/azure/cognitive-services/translator/quickstart-translator) on how to create a Translator resource in Azure and generate a key. Make sure you set the Region to "Global".
 
 <details>
   <summary>About the free tier</summary>
@@ -22,6 +22,15 @@ A Twitch chat bot that automatically translates users messages to English.
 
   Though, if you're using this bot and chat is super-active, then 2 million characters *might* not be enough. In this case, open an issue or contact me on Discord and I'll give this "issue" a higher priority on the TODO list. Nevertheless, Azure won't overcharge you if you're on the F1 tier.
 </details>
+
+So the .env should look something like this:
+
+```.env
+BOT_USERNAME=faizal01
+CHANNEL_NAME=faizal101
+TWITCH_OAUTH=oauth:yourouathkeydontshare
+AZURE_SUB_KEY=yoursubkeydontshare
+```
 
 Once you saved the .env, the bot should be good to go. Simply run it by `npm start`.
 
