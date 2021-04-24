@@ -27,38 +27,66 @@ function onMessageHandler (target, context, msg, self) {
     if (self) { return; } // Ignore messages from the bot
   
     // Remove whitespace from chat message
-    const commandName = msg.trim();
+    const message = msg.trim();
+    // console.log(context);
+    // console.log(msg);
 
-    translateMessage(commandName, target, context.username);
+    detectedLanguage(message, target);
+
+    // translateMessage(commandName, target, context.username);
   }
   
-  // Called every time the bot connects to Twitch chat
-  function onConnectedHandler(addr, port) {
-    console.log(`* Connected to ${addr}:${port}`);
-  }
+// Called every time the bot connects to Twitch chat
+function onConnectedHandler(addr, port) {
+  console.log(`* Connected to ${addr}:${port}`);
+}
 
-  // Translate Message
-  function translateMessage(message, target, user) {
-    var subscriptionKey = process.env.AZURE_SUB_KEY;
-    var endpoint = "https://api.cognitive.microsofttranslator.com/translate";
-    axios({
-      baseURL: endpoint,
-      method: 'post',
-      headers: {
-          'Ocp-Apim-Subscription-Key': subscriptionKey,
-          'Content-type': 'application/json',
-      },
-      params: {
-          'api-version': '3.0',
-          'to': ['en']
-      },
-      data: [{
-          'text': message
-      }],
-      responseType: 'json'
-  }).then(function(response){
-    const translatedText = response.data[0].translations[0].text;
-    const detectedLang = response.data[0].detectedLanguage.language;
-    if (detectedLang != 'en') return client.say(target, `${user}[${detectedLang}->en]: ${translatedText}`);
-  });
-  }
+// Detect language of the message
+function detectedLanguage(message, target) {
+  const endpoint = "https://api.cognitive.microsofttranslator.com/detect";
+  axios({
+    baseURL: endpoint,
+    method: 'post',
+    headers: {
+        'Ocp-Apim-Subscription-Key': process.env.AZURE_SUB_KEY,
+        'Content-type': 'application/json',
+    },
+    params: {
+        'api-version': '3.0'
+    },
+    data: [{
+        'text': message
+    }],
+    responseType: 'json'
+}).then(function(response){
+  const detectedLang = response.data[0].language;
+
+  // Checks if the message is in English
+  (detectedLang == 'en' ? true : translateMessage(message, target));
+});
+}
+
+// Translate the message
+function translateMessage(message, target) {
+  const endpoint = "https://api.cognitive.microsofttranslator.com/translate";
+  axios({
+    baseURL: endpoint,
+    method: 'post',
+    headers: {
+        'Ocp-Apim-Subscription-Key': process.env.AZURE_SUB_KEY,
+        'Content-type': 'application/json',
+    },
+    params: {
+        'api-version': '3.0',
+        'to': ['en']
+    },
+    data: [{
+        'text': message
+    }],
+    responseType: 'json'
+}).then(function(response){
+  const translatedText = response.data[0].translations[0].text;
+  const detectedLang = response.data[0].detectedLanguage.language;
+  return client.say(target, `\/me [${detectedLang}->en]: ${translatedText}`);
+});
+}
