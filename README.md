@@ -41,9 +41,11 @@ Note: The TODO list isn't in order.
 - [ ] Allow the broadcaster and mods to choose what language to translate the message to
 - [ ] Implement a user ignore list
 - [ ] Implement a language ignore list
-- [ ] Implement a third-party language detection library do avoid using Azure's Language Detect
+- [x] Split the function, one for detect and one to actually translate the message
 - [ ] Think of a name of the bot
 - [ ] Break message into multiple messages if it's too large
+- [ ] Allow the bot to translate to multiple languages (useful for chats where there are two different)
+- [ ] Implement a web GUI for configurating the bot
 
 ## Contributing
 
