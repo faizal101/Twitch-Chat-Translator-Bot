@@ -23,17 +23,16 @@ client.on('connected', onConnectedHandler);
 client.connect();
 
 // Called every time a message comes in
-function onMessageHandler (target, context, msg, self) {
+async function onMessageHandler (target, context, msg, self) {
     if (self) { return; } // Ignore messages from the bot
   
     // Remove whitespace from chat message
     const message = msg.trim();
-    // console.log(context);
-    // console.log(msg);
 
-    detectedLanguage(message, target);
-
-    // translateMessage(commandName, target, context.username);
+    // Translates the message if it's not true
+    if (!(await detectedLanguage(message))) {
+      translateMessage(message, target);
+    }
   }
   
 // Called every time the bot connects to Twitch chat
@@ -42,9 +41,9 @@ function onConnectedHandler(addr, port) {
 }
 
 // Detect language of the message
-function detectedLanguage(message, target) {
+async function detectedLanguage(message) {
   const endpoint = "https://api.cognitive.microsofttranslator.com/detect";
-  axios({
+  return await axios({
     baseURL: endpoint,
     method: 'post',
     headers: {
@@ -58,11 +57,11 @@ function detectedLanguage(message, target) {
         'text': message
     }],
     responseType: 'json'
-}).then(function(response){
+}).then((response) => {
   const detectedLang = response.data[0].language;
-
-  // Checks if the message is in English
-  (detectedLang == 'en' ? true : translateMessage(message, target));
+  
+  // Returns bool if the message is in English or not
+  return (detectedLang == 'en' ? true : false);
 });
 }
 
