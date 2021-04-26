@@ -14,7 +14,7 @@ A Twitch chat bot that automatically translates users messages to the chosen lan
 > **BOT_USERNAME** is the username of the Twitch account.\
 **TWITCH_OAUTH** is the token needed to connect to Twitch chat. You can generate one [here](https://twitchapps.com/tmi/).\
 **CHANNEL_NAME** is where you want the bot to run. This should be your Twitch channel (username).\
-**AZURE_SUB_KEY** Read the [prequisites in the Quickstart documentation](https://docs.microsoft.com/en-gb/azure/cognitive-services/translator/quickstart-translator) on how to create a Translator resource in Azure and generate a key. Make sure you set the Region to "Global".
+**AZURE_SUB_KEY** Read the [prequisites in the Quickstart documentation](https://docs.microsoft.com/en-gb/azure/cognitive-services/translator/quickstart-translator) on how to create a Translator resource in Azure and generate a key. Make sure you set the Region to "Global".\
 **PRIMARY_LANG** is the target language you want the bot to translate to. Uses the ISO 639-1 standard. Examples: `en` for English, `ja` for Japanese, `ko` for Korean, `zh-Hans` for Simplified Chinese. Check the [Language Support](https://docs.microsoft.com/en-us/azure/cognitive-services/translator/language-support) doc to see what languages Azure supports and what the code is.
 
 <details>
