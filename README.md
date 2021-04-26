@@ -15,7 +15,10 @@ A Twitch chat bot that automatically translates users messages to the chosen lan
 **TWITCH_OAUTH** is the token needed to connect to Twitch chat. You can generate one [here](https://twitchapps.com/tmi/).\
 **CHANNEL_NAME** is where you want the bot to run. This should be your Twitch channel (username).\
 **AZURE_SUB_KEY** Read the [prequisites in the Quickstart documentation](https://docs.microsoft.com/en-gb/azure/cognitive-services/translator/quickstart-translator) on how to create a Translator resource in Azure and generate a key. Make sure you set the Region to "Global".\
-**PRIMARY_LANG** is the target language you want the bot to translate to. Uses the ISO 639-1 standard. Examples: `en` for English, `ja` for Japanese, `ko` for Korean, `zh-Hans` for Simplified Chinese. Check the [Language Support](https://docs.microsoft.com/en-us/azure/cognitive-services/translator/language-support) doc to see what languages Azure supports and what the code is.
+**PRIMARY_LANG** is the target language you want the bot to translate to. Uses the ISO 639-1 standard. Examples: `en` for English, `ja` for Japanese, `ko` for Korean, `zh-Hans` for Simplified Chinese. Check the [Language Support](https://docs.microsoft.com/en-us/azure/cognitive-services/translator/language-support) doc to see what languages Azure supports and what the code is.\
+**SECONDARY_ LANG** optional entry. Add this if you want the bot to translate to another language that isn't the primary language. Useful for (semi)-bilingual chat. For example: Assume there's a Japanese VTuber where they have both Japanese and Western fans. The VTuber only understands Japanese. If only `PRIMARY_LANG` is set, non-Japanese messages (for example English) will be translated to Japanese. So the VTuber and Japanese fans can understand it. However, if someone types in Japanese, only the VTuber and other Japanese fans can understand it, leaving the western fans a left out a bit. In this case, `SECONDARY_LANG` can be set to `en` for English. What now happens is that the messages Japanese will be translated to English, so now even the western fans can understand what the other fans are saying.
+
+Obviously, machine translation isn't perfect and probably won't be for a very long time due to how languages work. However, 
 
 <details>
   <summary>About the free tier</summary>
