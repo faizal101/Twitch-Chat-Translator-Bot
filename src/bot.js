@@ -12,7 +12,8 @@ const opts = {
     ]
 };
 
-const lang = process.env.PRIMARY_LANG;
+const primaryLang = process.env.PRIMARY_LANG;
+const secondaryLang = process.env.SECONDARY_LANG;
 
 // Create a client with out options
 const client = new tmi.client(opts);
@@ -45,9 +46,26 @@ async function onMessageHandler (target, context, msg, self) {
     });
   }
 
-  // Translates the message if it's not true
-  if (!(await detectedLanguage(message))) {
-    translateMessage(message, target);
+  const  detectedLang = await detectedLanguage(message);
+
+  // Checks if SECONDARY_LANG is enabled
+  if (secondaryLang) {
+    // Checks if the language detected is the secondary language
+    if (detectedLang == secondaryLang) {
+      // If it is, translate it to the primary language
+      translateMessage(message, target, primaryLang);
+    } else if (detectedLang == primaryLang) { // Otherwise, it checks if the detected language is the primary language
+      // If it is, translate it to the secondary language
+      translateMessage(message, target, secondaryLang);
+    } else {
+      // Otherwise, translate it to the primary language
+      translateMessage(message, target, primaryLang);
+    }
+  } else {
+    if (detectedLang != primaryLang) {
+      // As long as the detected language doesn't match the primary language, translate the message
+      translateMessage(message, target, primaryLang);
+    }
   }
 }
   
@@ -74,15 +92,13 @@ async function detectedLanguage(message) {
     }],
     responseType: 'json'
 }).then((response) => {
-  const detectedLang = response.data[0].language;
-  
   // Returns bool if the message is in chosen language or not
-  return (detectedLang == lang ? true : false);
+  return (response.data[0].language);
 });
 }
 
 // Translate the message
-function translateMessage(message, target) {
+function translateMessage(message, target, translateTo) {
   const endpoint = "https://api.cognitive.microsofttranslator.com/translate";
   axios({
     baseURL: endpoint,
@@ -93,7 +109,7 @@ function translateMessage(message, target) {
     },
     params: {
         'api-version': '3.0',
-        'to': [lang]
+        'to': [translateTo]
     },
     data: [{
         'text': message
@@ -102,6 +118,6 @@ function translateMessage(message, target) {
 }).then(function(response){
   const translatedText = response.data[0].translations[0].text;
   const detectedLang = response.data[0].detectedLanguage.language;
-  return client.say(target, `\/me [${detectedLang}->${lang}]: ${translatedText}`);
+  return client.say(target, `/me [${detectedLang}->${translateTo}]: ${translatedText}`);
 });
 }

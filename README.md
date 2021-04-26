@@ -49,7 +49,7 @@ Note: The TODO list isn't in order.
 - [x] Split the function, one for detect and one to actually translate the message
 - [ ] Think of a name of the bot
 - [ ] Break message into multiple messages if it's too large
-- [ ] Allow the bot to translate to multiple languages (useful for (semi)-bilugual chat)
+- [x] Allow the bot to translate to multiple languages (useful for (semi)-bilingual chat)
 - [ ] Implement a web GUI for configurating the bot
 
 ## Contributing
