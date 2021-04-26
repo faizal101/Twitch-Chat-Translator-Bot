@@ -32,10 +32,26 @@ async function onMessageHandler (target, context, msg, self) {
     // Remove whitespace from chat message
     const message = msg.trim();
 
+    // WIP
+    /*
+    IMPORTANT
+    TODO: SANITISE THE MESSAGE SO THAT EMOTES ARE NOT TRANSLATED. 
+    This is to avoid situations like this: https://i.imgur.com/h6qZS8i.png
+    */
+    console.log(context.emotes)
+    console.log(message);
+    Object.values(context.emotes).forEach(([positions]) => {
+      console.log(positions);
+      let foo = positions.split('-');
+      console.log(foo)
+      console.log(message.substring(foo[0], foo[1]+1))
+    })
+
+
     // Translates the message if it's not true
-    if (!(await detectedLanguage(message))) {
-      translateMessage(message, target);
-    }
+    // if (!(await detectedLanguage(message))) {
+    //   translateMessage(message, target);
+    // }
   }
   
 // Called every time the bot connects to Twitch chat
