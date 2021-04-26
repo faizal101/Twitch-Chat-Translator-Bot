@@ -31,6 +31,7 @@ BOT_USERNAME=faizal01
 CHANNEL_NAME=faizal101
 TWITCH_OAUTH=oauth:yourouathkeydontshare
 AZURE_SUB_KEY=yoursubkeydontshare
+PRIMARY_LANG=en
 ```
 
 Once you saved the .env, the bot should be good to go. Simply run it by `npm start`.
