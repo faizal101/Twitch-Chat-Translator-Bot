@@ -13,7 +13,6 @@ const opts = {
 };
 
 const lang = process.env.PRIMARY_LANG;
-console.log(lang);
 
 // Create a client with out options
 const client = new tmi.client(opts);
@@ -27,32 +26,30 @@ client.connect();
 
 // Called every time a message comes in
 async function onMessageHandler (target, context, msg, self) {
-    if (self) { return; } // Ignore messages from the bot
-  
-    // Remove whitespace from chat message
-    const message = msg.trim();
+  if (self) {return;} // Ignore messages from the bot
 
-    // WIP
-    /*
-    IMPORTANT
-    TODO: SANITISE THE MESSAGE SO THAT EMOTES ARE NOT TRANSLATED. 
-    This is to avoid situations like this: https://i.imgur.com/h6qZS8i.png
-    */
-    console.log(context.emotes)
-    console.log(message);
+  // Remove whitespace from chat message
+  let message = msg.trim();  
+  let emotes = [];
+
+  // Checks if the message has any emotes 
+  if(context.emotes) {
     Object.values(context.emotes).forEach(([positions]) => {
-      console.log(positions);
-      let foo = positions.split('-');
-      console.log(foo)
-      console.log(message.substring(foo[0], foo[1]+1))
+      let pos = positions.split('-');
+      emotes.push(message.substring(pos[0], (parseInt(pos[1])+1)));
     })
-
-
-    // Translates the message if it's not true
-    // if (!(await detectedLanguage(message))) {
-    //   translateMessage(message, target);
-    // }
+    // TODO: Remove repeat entries in the array
+    emotes.forEach(x => {
+      // Removes all emotes in the message
+      message = message.replace(new RegExp(x, 'g'), '');
+    });
   }
+
+  // Translates the message if it's not true
+  if (!(await detectedLanguage(message))) {
+    translateMessage(message, target);
+  }
+}
   
 // Called every time the bot connects to Twitch chat
 function onConnectedHandler(addr, port) {
