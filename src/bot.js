@@ -12,6 +12,9 @@ const opts = {
     ]
 };
 
+const lang = process.env.PRIMARY_LANG;
+console.log(lang);
+
 // Create a client with out options
 const client = new tmi.client(opts);
 
@@ -60,8 +63,8 @@ async function detectedLanguage(message) {
 }).then((response) => {
   const detectedLang = response.data[0].language;
   
-  // Returns bool if the message is in English or not
-  return (detectedLang == 'en' ? true : false);
+  // Returns bool if the message is in chosen language or not
+  return (detectedLang == lang ? true : false);
 });
 }
 
@@ -77,7 +80,7 @@ function translateMessage(message, target) {
     },
     params: {
         'api-version': '3.0',
-        'to': ['en']
+        'to': [lang]
     },
     data: [{
         'text': message
@@ -86,6 +89,6 @@ function translateMessage(message, target) {
 }).then(function(response){
   const translatedText = response.data[0].translations[0].text;
   const detectedLang = response.data[0].detectedLanguage.language;
-  return client.say(target, `\/me [${detectedLang}->en]: ${translatedText}`);
+  return client.say(target, `\/me [${detectedLang}->${lang}]: ${translatedText}`);
 });
 }
