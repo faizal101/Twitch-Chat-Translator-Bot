@@ -39,12 +39,14 @@ async function onMessageHandler (target, context, msg, self) {
       let pos = positions.split('-');
       emotes.push(message.substring(pos[0], (parseInt(pos[1])+1)));
     })
-    // TODO: Remove repeat entries in the array
     emotes.forEach(x => {
       // Removes all emotes in the message
       message = message.replace(new RegExp(x, 'g'), '');
     });
   }
+
+  // Does not translate if message is under 5 characters
+  if(message.length <=5) {return;}
 
   const  detectedLang = await detectedLanguage(message);
 
@@ -118,6 +120,7 @@ function translateMessage(message, target, translateTo) {
 }).then(function(response){
   const translatedText = response.data[0].translations[0].text;
   const detectedLang = response.data[0].detectedLanguage.language;
+  if (message == translatedText) {return;}
   return client.say(target, `/me [${detectedLang}->${translateTo}]: ${translatedText}`);
 });
 }
