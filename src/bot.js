@@ -14,23 +14,23 @@ const opts = {
 
 const primaryLang = process.env.PRIMARY_LANG;
 const secondaryLang = process.env.SECONDARY_LANG;
-
-// Create a client with out options
+const endpoint = 'https://api.cognitive.microsofttranslator.com';
 const client = new tmi.client(opts);
 
-// Register our event handlers (defined below)
 client.on('message', onMessageHandler);
 client.on('connected', onConnectedHandler);
-
-// Connect to Twitch:
 client.connect();
+
+// Called every time the bot connects to Twitch chat
+function onConnectedHandler(addr, port) {
+  console.log(`* Connected to ${addr}:${port}`);
+}
 
 // Called every time a message comes in
 async function onMessageHandler (target, context, msg, self) {
   if (self) {return;} // Ignore messages from the bot
 
-  // Remove whitespace from chat message
-  let message = msg.trim();  
+  let message = msg.trim();
   let emotes = [];
 
   // Checks if the message has any emotes 
@@ -40,7 +40,6 @@ async function onMessageHandler (target, context, msg, self) {
       emotes.push(message.substring(pos[0], (parseInt(pos[1])+1)));
     })
     emotes.forEach(x => {
-      // Removes all emotes in the message
       message = message.replace(new RegExp(x, 'g'), '');
     });
   }
@@ -48,19 +47,14 @@ async function onMessageHandler (target, context, msg, self) {
   // Does not translate if message is under 5 characters
   if(message.length <=5) {return;}
 
-  const  detectedLang = await detectedLanguage(message);
+  const detectedLang = await detectedLanguage(message);
 
-  // Checks if SECONDARY_LANG is enabled
   if (secondaryLang) {
-    // Checks if the language detected is the secondary language
     if (detectedLang == secondaryLang) {
-      // If it is, translate it to the primary language
       translateMessage(message, target, primaryLang);
-    } else if (detectedLang == primaryLang) { // Otherwise, it checks if the detected language is the primary language
-      // If it is, translate it to the secondary language
+    } else if (detectedLang == primaryLang) {
       translateMessage(message, target, secondaryLang);
     } else {
-      // Otherwise, translate it to the primary language
       translateMessage(message, target, primaryLang);
     }
   } else {
@@ -70,17 +64,12 @@ async function onMessageHandler (target, context, msg, self) {
     }
   }
 }
-  
-// Called every time the bot connects to Twitch chat
-function onConnectedHandler(addr, port) {
-  console.log(`* Connected to ${addr}:${port}`);
-}
 
 // Detect language of the message
 async function detectedLanguage(message) {
-  const endpoint = "https://api.cognitive.microsofttranslator.com/detect";
   return await axios({
     baseURL: endpoint,
+    url: '/detect',
     method: 'post',
     headers: {
         'Ocp-Apim-Subscription-Key': process.env.AZURE_SUB_KEY,
@@ -94,16 +83,15 @@ async function detectedLanguage(message) {
     }],
     responseType: 'json'
 }).then((response) => {
-  // Returns bool if the message is in chosen language or not
   return (response.data[0].language);
 });
 }
 
 // Translate the message
 function translateMessage(message, target, translateTo) {
-  const endpoint = "https://api.cognitive.microsofttranslator.com/translate";
   axios({
     baseURL: endpoint,
+    url: '/translate',
     method: 'post',
     headers: {
         'Ocp-Apim-Subscription-Key': process.env.AZURE_SUB_KEY,
