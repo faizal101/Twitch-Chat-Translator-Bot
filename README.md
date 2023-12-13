@@ -39,6 +39,25 @@ PRIMARY_LANG=en
 
 Once you saved the .env, the bot should be good to go. Simply run it by `npm start`.
 
+## Docker container
+
+To run as a docker container run:
+
+```
+docker run \
+  --name "/TwitchChatTranslator" \
+  --runtime "runc" \
+  --env "BOT_USERNAME=YourBotUserName" \
+  --env "TWITCH_OAUTH=YourBotsOAuthKey" \
+  --env "CHANNEL_NAME=YourTwitchChannel" \
+  --env "AZURE_SUB_KEY=YourAzureSubscriptionKey" \
+  --env "PRIMARY_LANG=en" \
+  --detach \
+  --entrypoint "docker-entrypoint.sh" \
+  "scsa20/twitch-chat-translator-bot:latest" \
+  "node" "bot.js" 
+```
+
 ## TODO List
 
 Note: The TODO list isn't in order.
