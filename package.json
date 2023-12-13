@@ -4,7 +4,8 @@
   "description": "A Twitch chat bot that automatically translates users messages.",
   "main": "src/bot.js",
   "scripts": {
-    "start": "node src/bot.js",
+    "start": "npx tsc && node src/bot.js",
+    "dev": "nodemon src/bot.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -18,6 +19,14 @@
   "dependencies": {
     "axios": "^0.21.1",
     "dotenv": "^8.2.0",
-    "tmi.js": "^1.8.2"
+    "eslint": "^8.49.0",
+    "tmi.js": "^1.8.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.7.0",
+    "@types/tmi.js": "^1.8.4",
+    "nodemon": "^3.0.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
   }
 }

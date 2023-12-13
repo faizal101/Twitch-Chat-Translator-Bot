@@ -1,6 +1,6 @@
-FROM node:12-alpine
+FROM node:18-alpine
 WORKDIR /app
 COPY ["package.json", "package-lock.json*", "./"]
-RUN npm install --production
+RUN yarn install --production
 COPY src/bot.js .
 CMD ["node", "bot.js"]
