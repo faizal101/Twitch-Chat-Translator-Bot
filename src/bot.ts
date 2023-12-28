@@ -36,9 +36,10 @@ async function onMessageHandler(
   if (self) {
     return;
   }
-
   let message = msg.trim();
   let emotes: string[] = [];
+  const isBroadcaster = context.badges.broadcaster;
+  const isMod = context.badges.moderator;
 
   // Checks if the message has any emote(s) and removes them
   if (context.emotes) {
@@ -51,8 +52,9 @@ async function onMessageHandler(
     });
   }
 
-  // Does not translate if message is under 5 characters
-  if (message.length <= 5) {
+  // TODO: This is not a good implementation. Need to experiment and find a score that will only translate messages that needs to be translated.
+  // Does not translate if the message is from the streamer or a mod, or the message is under 10 characters
+  if (isBroadcaster || isMod || message.length <= 10) {
     return;
   }
 
