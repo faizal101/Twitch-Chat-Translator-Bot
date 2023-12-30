@@ -1,6 +1,5 @@
 FROM node:18-alpine
 WORKDIR /app
-COPY ["package.json", "package-lock.json*", "./"]
-RUN yarn install --production
-COPY src/bot.js .
-CMD ["node", "bot.js"]
+COPY . .
+RUN yarn install
+CMD yarn start
