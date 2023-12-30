@@ -54,7 +54,7 @@ async function onMessageHandler(
 
   // TODO: This is not a good implementation. Need to experiment and find a score that will only translate messages that needs to be translated.
   // Does not translate if the message is from the streamer or a mod, or the message is under 10 characters
-  if (isBroadcaster || isMod || message.length <= 10) {
+  if (isMod || message.length <= 5) {
     return;
   }
 

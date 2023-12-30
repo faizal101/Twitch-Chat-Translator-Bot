@@ -20,13 +20,13 @@
     "axios": "^0.21.1",
     "dotenv": "^8.2.0",
     "eslint": "^8.49.0",
-    "tmi.js": "^1.8.4"
+    "tmi.js": "^1.8.4",
+    "typescript": "^5.3.3"
   },
   "devDependencies": {
-    "@types/node": "^20.7.0",
+    "@types/node": "^20.10.6",
     "@types/tmi.js": "^1.8.4",
     "nodemon": "^3.0.1",
-    "ts-node": "^10.9.1",
-    "typescript": "^5.2.2"
+    "ts-node": "^10.9.1"
   }
 }
