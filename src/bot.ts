@@ -124,7 +124,7 @@ function translateMessage(
     },
     params: {
       'api-version': '3.0',
-      to: [translateTo]
+      to: translateTo
     },
     data: [
       {
