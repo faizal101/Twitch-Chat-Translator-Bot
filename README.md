@@ -64,7 +64,7 @@ docker run \
 Note: The TODO list isn't in order.
 
 - [x] Allow the user to choose what language to translate to
-- [ ] Implement a user ignore list
+- [x] Implement a user ignore list
 - [ ] Implement a language ignore list
 - [x] Split the function, one for detect and one to actually translate the message
 - [ ] Think of a name of the bot
