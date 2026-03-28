@@ -61,6 +61,7 @@ You can add/remove users to an ignore list which the bot will ignore when transl
 !ignore remove userName  # Will remove user from ignore list
 !ignore list             # List users in ignore list
 
+
 If you're using docker, make sure you use the new docker run to map /data in the container path to your local system (likewise you can also use a docker volume) to ensure the list is persistent.
 
 ## TODO List
