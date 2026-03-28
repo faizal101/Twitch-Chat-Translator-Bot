@@ -45,19 +45,23 @@ Once you saved the .env, the bot should be good to go. Simply run it by `yarn st
 To run as a docker container run:
 
 ```
-docker run \
-  --name "/TwitchChatTranslator" \
-  --runtime "runc" \
-  --env "BOT_USERNAME=YourBotUserName" \
-  --env "TWITCH_OAUTH=YourBotsOAuthKey" \
-  --env "CHANNEL_NAME=YourTwitchChannel" \
-  --env "AZURE_SUB_KEY=YourAzureSubscriptionKey" \
-  --env "PRIMARY_LANG=en" \
-  --detach \
-  --entrypoint "docker-entrypoint.sh" \
-  "scsa20/twitch-chat-translator-bot:latest" \
-  "node" "bot.js"
+docker run -e BOT_USERNAME=your_bot \
+           -e TWITCH_OAUTH=oauth:your_token \
+           -e CHANNEL_NAME=your_channel \
+           -e PRIMARY_LANG=en \
+           -e AZURE_SUB_KEY=your_azure_key \
+           -v /local/path:/data \
+           scsa20/twitch-chat-translator-bot:test
 ```
+
+## Ignore List
+You can add/remove users to an ignore list which the bot will ignore when translating. Useful if you have another bot that might try to post something that you do not want the translate bot to translate.
+
+!ignore add userName     # Will add user to ignore list
+!ignore remove userName  # Will remove user from ignore list
+!ignore list             # List users in ignore list
+
+If you're using docker, make sure you use the new docker run to map /data in the container path to your local system (likewise you can also use a docker volume) to ensure the list is persistent.
 
 ## TODO List
 
