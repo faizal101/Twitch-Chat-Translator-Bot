@@ -121,3 +121,6 @@ dist
 # Config folder
 .config/
 config/
+
+# Package-lock
+package-lock.json
