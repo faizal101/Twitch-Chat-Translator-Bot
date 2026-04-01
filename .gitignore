@@ -124,3 +124,7 @@ config/
 
 # Package-lock
 package-lock.json
+
+# Left over directories from another branch
+obj/
+bin/
