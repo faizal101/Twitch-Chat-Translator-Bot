@@ -15,53 +15,10 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Update Docker Hub description
-        env:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-        run: |
-          set -euo pipefail
-
-          if [ -z "${DOCKERHUB_USERNAME:-}" ] || [ -z "${DOCKERHUB_TOKEN:-}" ]; then
-            echo "Docker Hub credentials are not configured" >&2
-            exit 1
-          fi
-
-          python - <<'PY'
-          import base64
-          import json
-          import os
-          import sys
-          import urllib.request
-          import urllib.error
-          from pathlib import Path
-
-          username = os.environ['DOCKERHUB_USERNAME']
-          token = os.environ['DOCKERHUB_TOKEN']
-          repo = 'twitch-chat-translator-bot'
-          readme_path = Path('README.dockerhub.md')
-
-          if not readme_path.exists():
-              print('README file not found', file=sys.stderr)
-              sys.exit(1)
-
-          description = readme_path.read_text(encoding='utf-8')
-          payload = json.dumps({'full_description': description}).encode('utf-8')
-          auth_header = 'Basic ' + base64.b64encode(f'{username}:{token}'.encode('utf-8')).decode('ascii')
-          request = urllib.request.Request(
-              f'https://hub.docker.com/v2/repositories/{username}/{repo}/',
-              data=payload,
-              headers={
-                  'Content-Type': 'application/json',
-                  'Authorization': auth_header,
-              },
-              method='PATCH'
-          )
-
-          try:
-              with urllib.request.urlopen(request) as response:
-                  print(f"Docker Hub README updated successfully ({response.status})")
-          except urllib.error.HTTPError as error:
-              body = error.read().decode('utf-8', 'replace')
-              print(body, file=sys.stderr)
-              sys.exit(1)
-          PY
+        uses: peter-evans/dockerhub-description@v5
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          repository: ${{ secrets.DOCKERHUB_USERNAME }}/twitch-chat-translator-bot
+          short-description: "Twitch chat translator bot for Docker"
+          readme-filepath: ./README.dockerhub.md
