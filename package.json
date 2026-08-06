@@ -6,8 +6,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/bot.js",
-    "dev": "nodemon --esm src/bot.ts",
-    "test": "node --test"
+    "dev": "nodemon --esm src/bot.ts"
   },
   "main": "dist/bot.js",
   "keywords": [
