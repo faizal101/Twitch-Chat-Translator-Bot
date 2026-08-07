@@ -1,25 +1,24 @@
-import axios from 'axios';
 import type tmi from 'tmi.js';
 
 const endpoint = 'https://api.cognitive.microsofttranslator.com';
 
 export async function detectLanguage(message: string): Promise<string> {
-  const response = await axios({
-    baseURL: endpoint,
-    url: '/detect',
-    method: 'post',
+  const response = await fetch(`${endpoint}/detect?api-version=3.0`, {
+    method: 'POST',
     headers: {
-      'Ocp-Apim-Subscription-Key': process.env.AZURE_SUB_KEY,
-      'Content-type': 'application/json'
+      'Ocp-Apim-Subscription-Key': process.env.AZURE_SUB_KEY ?? '',
+      'Content-Type': 'application/json'
     },
-    params: {
-      'api-version': '3.0'
-    },
-    data: [{ text: message }],
-    responseType: 'json'
+    body: JSON.stringify([{ text: message }])
   });
 
-  return response.data[0].language;
+  if (!response.ok) {
+    const bodyText = await response.text();
+    throw new Error(`Detect request failed: ${response.status} ${response.statusText} ${bodyText}`);
+  }
+
+  const data = await response.json();
+  return data[0]?.language;
 }
 
 export async function translateMessage(
@@ -28,24 +27,26 @@ export async function translateMessage(
   target: string,
   translateTo: string
 ): Promise<void> {
-  const response = await axios({
-    baseURL: endpoint,
-    url: '/translate',
-    method: 'post',
+  const response = await fetch(`${endpoint}/translate?api-version=3.0&to=${encodeURIComponent(
+    translateTo
+  )}`, {
+    method: 'POST',
     headers: {
-      'Ocp-Apim-Subscription-Key': process.env.AZURE_SUB_KEY,
-      'Content-type': 'application/json'
+      'Ocp-Apim-Subscription-Key': process.env.AZURE_SUB_KEY ?? '',
+      'Content-Type': 'application/json'
     },
-    params: {
-      'api-version': '3.0',
-      to: translateTo
-    },
-    data: [{ text: message }],
-    responseType: 'json'
+    body: JSON.stringify([{ text: message }])
   });
 
-  const translatedText = response.data[0].translations[0].text;
-  const detectedLang = response.data[0].detectedLanguage.language;
+  if (!response.ok) {
+    const bodyText = await response.text();
+    throw new Error(`Translate request failed: ${response.status} ${response.statusText} ${bodyText}`);
+  }
+
+  const data = await response.json();
+
+  const translatedText = data[0]?.translations?.[0]?.text;
+  const detectedLang = data[0]?.detectedLanguage?.language;
 
   if (message === translatedText) return;
 

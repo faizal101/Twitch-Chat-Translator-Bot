@@ -1,7 +1,6 @@
 import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import crypto from 'crypto';
-import axios from 'axios';
 import { CONFIG_DIR } from './config.js';
 
 const ENCRYPTION_KEY_FILE = join(CONFIG_DIR, 'encryption-key.txt');
@@ -114,22 +113,28 @@ export async function refreshToken(
   refreshToken: string
 ): Promise<StoredToken> {
   try {
-    const response = await axios.post(
-      'https://id.twitch.tv/oauth2/token',
-      null,
-      {
-        params: {
-          client_id: clientId,
-          client_secret: clientSecret,
-          grant_type: 'refresh_token',
-          refresh_token: refreshToken
-        }
-      }
-    );
+    const response = await fetch('https://id.twitch.tv/oauth2/token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: new URLSearchParams({
+        client_id: clientId,
+        client_secret: clientSecret,
+        grant_type: 'refresh_token',
+        refresh_token: refreshToken
+      })
+    });
 
-    const newAccessToken = response.data?.access_token;
-    const newRefreshToken = response.data?.refresh_token || refreshToken;
-    const expiresIn = response.data?.expires_in || 3600;
+    if (!response.ok) {
+      const bodyText = await response.text();
+      throw new Error(`Refresh token request failed: ${response.status} ${response.statusText} ${bodyText}`);
+    }
+
+    const data = await response.json();
+    const newAccessToken = data?.access_token;
+    const newRefreshToken = data?.refresh_token || refreshToken;
+    const expiresIn = data?.expires_in || 3600;
 
     if (!newAccessToken) {
       throw new Error('No access token in refresh response');
